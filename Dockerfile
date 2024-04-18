@@ -1,5 +1,5 @@
 # 기본 이미지 설정
-FROM python:3.12.2-slim
+FROM python:3.9-slim
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -13,4 +13,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["python3.12", "server.py"]
+CMD ["python", "server.py"]
