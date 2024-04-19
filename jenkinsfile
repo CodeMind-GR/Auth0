@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    environment {
+        // 환경 변수 설정
+        ECR_REGISTRY = "211125418324.dkr.ecr.ap-northeast-2.amazonaws.com"
+        IMAGE_NAME = "auth0"
+        AWS_DEFAULT_REGION = "ap-northeast-2"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // GitHub에서 최신 코드를 체크아웃
+                checkout scm
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                // AWS CLI를 사용하여 ECR에 로그인
+                sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
+            }
+        }
+
+        stage('Build and push Docker Image') {
+            steps {
+                // Docker 이미지 빌드
+                sh "docker build -t ${IMAGE_NAME} ."
+                // Docker 이미지에 태그 지정
+                sh "docker tag ${IMAGE_NAME}:latest ${ECR_REGISTRY}/${IMAGE_NAME}:latest"
+                // AWS 리포지토리로 푸시
+                sh "docker push ${ECR_REGISTRY}/${IMAGE_NAME}:latest"
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                // 빌드된 이미지 삭제
+                sh "docker rmi ${ECR_REGISTRY}/${IMAGE_NAME}:latest"
+                sh "docker rmi ${IMAGE_NAME}:latest"
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution is complete!'
+        }
+    }
+}
+
