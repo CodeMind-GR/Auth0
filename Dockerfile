@@ -11,6 +11,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 애플리케이션 파일 복사
 COPY . .
 
+# 환경 변수를 위한 ARG 설정
+ARG AUTH0_CLIENT_ID
+ARG AUTH0_CLIENT_SECRET
+ARG AUTH0_DOMAIN
+ARG APP_SECRET_KEY
+
 # 환경 변수 파일 생성
 RUN echo "AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}" > .env && \
     echo "AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET}" >> .env && \
