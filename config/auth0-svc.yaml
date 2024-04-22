@@ -16,6 +16,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth0-deployment
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: auth0=211125418324.dkr.ecr.ap-northeast-2.amazonaws.com/auth0:latest
+    argocd-image-updater.argoproj.io/write-back-method: git
 spec:
   replicas: 1
   selector:
@@ -28,7 +31,7 @@ spec:
     spec:
       containers:
       - name: auth0
-        image: 211125418324.dkr.ecr.ap-northeast-2.amazonaws.com/auth0
+        image: 211125418324.dkr.ecr.ap-northeast-2.amazonaws.com/auth0:latest
         ports:
         - containerPort: 3000
         env:
