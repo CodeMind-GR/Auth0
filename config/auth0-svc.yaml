@@ -36,4 +36,4 @@ spec:
         - containerPort: 3000
         env:
         - name: STREAMLIT_APP_URL
-          value: "http://54.180.129.95:32314/app"
+          value: "http://ae46ebe8b5e9c4eb58d6ee4b08431a0a-1959267954.ap-northeast-2.elb.amazonaws.com/"
